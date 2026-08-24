@@ -1,0 +1,33 @@
+{
+  "C": [
+    {
+      "id": "GO:0110165",
+      "name": "cellular anatomical entity",
+      "reason": "near-root, groups everything"
+    },
+    {
+      "id": "GO:0032991",
+      "name": "protein-containing complex",
+      "reason": "excluded via Slim hygiene tab"
+    }
+  ],
+  "F": [],
+  "P": [],
+  "global": [
+    {
+      "id": "GO:0005575",
+      "name": "cellular_component",
+      "reason": "aspect root, uninformative"
+    },
+    {
+      "id": "GO:0003674",
+      "name": "molecular_function",
+      "reason": "aspect root, uninformative"
+    },
+    {
+      "id": "GO:0008150",
+      "name": "biological_process",
+      "reason": "aspect root, uninformative"
+    }
+  ]
+}

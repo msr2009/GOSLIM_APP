@@ -1,0 +1,6 @@
+pandas==3.0.5
+goatools==1.6.4
+plotly==6.9.0
+shiny==1.7.0
+shinywidgets==0.8.1
+openpyxl==3.1.5

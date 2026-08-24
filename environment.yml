@@ -1,0 +1,14 @@
+name: go_terms
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.12
+  - pandas
+  - goatools
+  - plotly
+  - openpyxl
+  - pip
+  - pip:
+      - shiny>=1.2
+      - shinywidgets

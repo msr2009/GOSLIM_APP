@@ -1,0 +1,63 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.eggs/
+*.egg-info/
+build/
+dist/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- R (used ad hoc for reading WormTagDB .qs exports) ---
+.Rhistory
+.RData
+.Rproj.user/
+Rlibs/
+
+# --- Editors / OS cruft ---
+*.swp
+*.swo
+*~
+.*.un~
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Shiny app runtime / deploy artifacts ---
+goslim_app/vendor/
+goslim_app/rsconnect/
+goslim_app/__pycache__/
+
+# --- Large external data sources (see README "Data sources" for download commands) ---
+gene_association.WS298.wb
+gene_ontology.WS298.obo
+go-basic.obo
+ORTHOLOGY-ALLIANCE_COMBINED.tsv
+DISEASE-ALLIANCE_WB.tsv
+c_elegans.PRJNA13758.WS279.go_annotations.gaf
+
+# --- Generated pipeline outputs (regenerate via map_genes_to_go_cc.py) ---
+# worm_disease_go.tsv
+# worm_disease_go_per_term.tsv
+# worm_disease_go_per_gene.tsv
+# symbol_not_found_*.txt
+
+# --- Claude Code session state ---
+.claude/
+
+# --- Secrets / local overrides ---
+goslim_app.json
+.env
+*.env.local

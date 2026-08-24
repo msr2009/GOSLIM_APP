@@ -1,0 +1,172 @@
+{
+  "added_terms": [
+    {
+      "id": "GO:0000502",
+      "name": "proteasome complex"
+    },
+    {
+      "id": "GO:0005635",
+      "name": "nuclear envelope"
+    },
+    {
+      "id": "GO:0005654",
+      "name": "nucleoplasm"
+    },
+    {
+      "id": "GO:0005681",
+      "name": "spliceosomal complex"
+    },
+    {
+      "id": "GO:0005730",
+      "name": "nucleolus"
+    },
+    {
+      "id": "GO:0005811",
+      "name": "lipid droplet"
+    },
+    {
+      "id": "GO:0005840",
+      "name": "ribosome"
+    },
+    {
+      "id": "GO:0012505",
+      "name": "endomembrane system"
+    },
+    {
+      "id": "GO:0031012",
+      "name": "extracellular matrix"
+    }
+  ],
+  "aspect": "C",
+  "base_slim": "agr",
+  "created": "2026-08-16T17:48:22.934159+00:00",
+  "include_extra_terms": true,
+  "name": "mattrich_test_slim",
+  "notes": "split nucleus, add ribosome",
+  "removed_terms": [],
+  "schema_version": 1,
+  "source": {
+    "gaf": "gene_association.WS298.wb",
+    "gene_list": "worm_disease",
+    "obo": "gene_ontology.WS298.obo",
+    "taxon": "taxon:6239"
+  },
+  "stats": {
+    "largest_group": 1706,
+    "n_genes_covered": 4173,
+    "n_no_annotation": 344,
+    "n_terms": 27,
+    "n_unmapped": 14
+  },
+  "terms": [
+    {
+      "id": "GO:0000502",
+      "name": "proteasome complex"
+    },
+    {
+      "id": "GO:0005576",
+      "name": "extracellular region"
+    },
+    {
+      "id": "GO:0005634",
+      "name": "nucleus"
+    },
+    {
+      "id": "GO:0005635",
+      "name": "nuclear envelope"
+    },
+    {
+      "id": "GO:0005654",
+      "name": "nucleoplasm"
+    },
+    {
+      "id": "GO:0005681",
+      "name": "spliceosomal complex"
+    },
+    {
+      "id": "GO:0005694",
+      "name": "chromosome"
+    },
+    {
+      "id": "GO:0005730",
+      "name": "nucleolus"
+    },
+    {
+      "id": "GO:0005737",
+      "name": "cytoplasm"
+    },
+    {
+      "id": "GO:0005739",
+      "name": "mitochondrion"
+    },
+    {
+      "id": "GO:0005768",
+      "name": "endosome"
+    },
+    {
+      "id": "GO:0005773",
+      "name": "vacuole"
+    },
+    {
+      "id": "GO:0005783",
+      "name": "endoplasmic reticulum"
+    },
+    {
+      "id": "GO:0005794",
+      "name": "Golgi apparatus"
+    },
+    {
+      "id": "GO:0005811",
+      "name": "lipid droplet"
+    },
+    {
+      "id": "GO:0005829",
+      "name": "cytosol"
+    },
+    {
+      "id": "GO:0005840",
+      "name": "ribosome"
+    },
+    {
+      "id": "GO:0005856",
+      "name": "cytoskeleton"
+    },
+    {
+      "id": "GO:0005886",
+      "name": "plasma membrane"
+    },
+    {
+      "id": "GO:0012505",
+      "name": "endomembrane system"
+    },
+    {
+      "id": "GO:0016020",
+      "name": "membrane"
+    },
+    {
+      "id": "GO:0030054",
+      "name": "cell junction"
+    },
+    {
+      "id": "GO:0031012",
+      "name": "extracellular matrix"
+    },
+    {
+      "id": "GO:0031410",
+      "name": "cytoplasmic vesicle"
+    },
+    {
+      "id": "GO:0042995",
+      "name": "cell projection"
+    },
+    {
+      "id": "GO:0043005",
+      "name": "neuron projection"
+    },
+    {
+      "id": "GO:0045202",
+      "name": "synapse"
+    }
+  ],
+  "use_part_of": true
+}
