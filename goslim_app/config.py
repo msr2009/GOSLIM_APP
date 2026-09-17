@@ -28,6 +28,13 @@ GENE_LIST_PATHS = {
     if path.suffix in (".tsv", ".txt") and path.is_file()
 }
 GENE_LIST_LABELS = {stem: stem.replace("_", " ") for stem in GENE_LIST_PATHS}
+# hand-picked display names where filename-prettifying isn't the desired label
+GENE_LIST_LABEL_OVERRIDES = {
+    "disease_orthologs": "disease orthologs",
+}
+GENE_LIST_LABELS.update(
+    {k: v for k, v in GENE_LIST_LABEL_OVERRIDES.items() if k in GENE_LIST_PATHS}
+)
 DEFAULT_GENE_LIST = "celegans_proteome" if "celegans_proteome" in GENE_LIST_PATHS else next(
     iter(GENE_LIST_PATHS), None
 )

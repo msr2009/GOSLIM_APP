@@ -25,7 +25,7 @@ python map_genes_to_go_cc.py \
     --gaf gene_association.WS298.wb \
     --obo gene_ontology.WS298.obo \
     --slim goslim_generic.obo goslim_agr.obo \
-    --genes data/worm_disease_genes.tsv \
+    --genes data/disease_orthologs.tsv \
     --out-prefix worm_disease_go
 ```
 
@@ -84,7 +84,7 @@ Gotchas specific to the app:
 `build_gene_list.py` downloads the WormBase geneIDs file (via the EBI FTP mirror, since
 downloads.wormbase.org sits behind a Cloudflare challenge) and derives
 `data/celegans_proteome.tsv` — one protein-coding gene symbol per line, used by the app as an
-alternative gene list to `data/worm_disease_genes.tsv`.
+alternative gene list to `data/disease_orthologs.tsv`.
 
 ```
 mamba run -n go_terms python build_gene_list.py --release WS298
@@ -95,9 +95,11 @@ mamba run -n go_terms python build_gene_list.py --release WS298
 1. **Orthology**: `ORTHOLOGY-ALLIANCE_COMBINED.tsv` (Alliance orthology calls across species)
    is filtered to `Gene1SpeciesName == Caenorhabditis elegans` /
    `Gene2SpeciesName == Homo sapiens` to get worm genes with human orthologs.
-2. **Disease genes**: `DISEASE-ALLIANCE_WB.tsv` filtered to `DBobjectType == 'gene'` gives the
-   set of worm genes with disease associations (`data/worm_disease_genes.tsv` is this gene list,
-   one symbol per line — the `--genes` input to the script).
+2. **Disease genes**: `data/disease_orthologs.tsv` (one symbol per line — the `--genes` input to
+   the script) is worm genes orthologous to human disease genes: human genes from the Alliance
+   disease file filtered to `AssociationType == 'is_implicated_in'` (direct causal calls only,
+   excluding orthology-inferred and biomarker associations), intersected against the worm-human
+   pairs in `ORTHOLOGY-ALLIANCE_COMBINED.tsv` from step 1.
 3. **GO annotation**: `gene_association.WS298.wb` (GAF format, see `GAF_COLS` in the script for
    column layout) is filtered to CC-aspect rows with `Qualifier` in `{located_in, part_of}` to
    get each gene's cellular-component GO terms. Other qualifiers (e.g. `enables`, `involved_in`)

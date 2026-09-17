@@ -54,6 +54,12 @@ c_elegans.PRJNA13758.WS279.go_annotations.gaf
 # worm_disease_go_per_gene.tsv
 # symbol_not_found_*.txt
 
+# --- Human disease / worm ortholog exploratory exports ---
+data/human_disease_worm_orthology_detail.tsv
+data/human_disease_worm_orthology_by_disease.tsv
+data/human_disease_worm_orthology_by_worm_gene.tsv
+data/human_disease_worm_orthology_by_human_gene.tsv
+
 # --- Claude Code session state ---
 .claude/
 
