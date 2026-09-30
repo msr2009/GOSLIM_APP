@@ -8,3 +8,4 @@ Track which AI models were used for work in this directory.
 | 2026-08-18 | claude-sonnet-5 | | |
 | 2026-08-24 | claude-sonnet-5 | | |
 | 2026-09-17 | claude-sonnet-5 | | |
+| 2026-09-30 | claude-opus-5-5 | | |
