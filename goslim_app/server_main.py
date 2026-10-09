@@ -361,15 +361,18 @@ def server(input, output, session):
                 hovertemplate=f"%{{y}}<br>%{{customdata[0]}} {hover_label}, %{{customdata[1]:.1f}}% of group<extra></extra>",
             )
 
-        _add_tagged_marker(
-            DATA["tagged_genes"], "WormTagDB fluorescent tags", "#f97316", "tagged genes (WormTagDB)"
-        )
-        _add_tagged_marker(
-            DATA["tagged_genes_cgc"],
-            "CGC-available fluorescent tags",
-            "#22c55e",
-            "tagged genes with a CGC strain",
-        )
+        # a marker is only drawn while its genes are included in the calculation
+        if input.include_wormtagdb():
+            _add_tagged_marker(
+                DATA["tagged_genes"], "WormTagDB fluorescent tags", "#f97316", "tagged genes (WormTagDB)"
+            )
+        if input.include_cgc():
+            _add_tagged_marker(
+                DATA["tagged_genes_cgc"],
+                "CGC-available fluorescent tags",
+                "#22c55e",
+                "tagged genes with a CGC strain",
+            )
         return fig
 
     # --- slim groups tab ---
