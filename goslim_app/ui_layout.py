@@ -46,6 +46,11 @@ coverage_tab = ui.nav_panel(
         width=1 / 5,
     ),
     output_widget("group_size_plot"),
+    ui.layout_column_wrap(
+        ui.input_switch("include_wormtagdb", "Include WormTagDB-tagged genes", True),
+        ui.input_switch("include_cgc", "Include CGC-tagged genes", True),
+        width=1 / 2,
+    ),
 )
 
 slim_groups_tab = ui.nav_panel(

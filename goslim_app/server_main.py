@@ -68,8 +68,9 @@ def server(input, output, session):
         aspect = input.aspect()
         base_choice = input.base_slim()
         if base_choice == "none":
-            ids = set()
-        elif base_choice.startswith(SAVED_BASE_PREFIX):
+            # an empty base stays empty: extras are never mixed in
+            return frozenset()
+        if base_choice.startswith(SAVED_BASE_PREFIX):
             ids = _saved_slim_term_ids(base_choice[len(SAVED_BASE_PREFIX):])
         else:
             ids = set(DATA["base_slims"].get((base_choice, aspect), frozenset()))
@@ -93,6 +94,11 @@ def server(input, output, session):
             genes = load_genes(upload[0]["datapath"])
         else:
             genes = DATA["gene_lists"].get(input.gene_list(), [])
+        # drop tagged genes when their switch is off (CGC genes are a subset of WormTagDB genes)
+        if not input.include_wormtagdb():
+            genes = [g for g in genes if g not in DATA["tagged_genes"]]
+        if not input.include_cgc():
+            genes = [g for g in genes if g not in DATA["tagged_genes_cgc"]]
         return genes
 
     @reactive.calc
@@ -339,12 +345,18 @@ def server(input, output, session):
                 .reindex(ordered["group_name"], fill_value=0)
             )
             pct = (n / group_totals.reindex(n.index) * 100).fillna(0)
+            # legend total: tagged genes across the full input list, including genes
+            # with no slim group (unannotated / unmapped / symbol not found)
+            full_list = set(gene_symbols())
+            n_list = len(full_list)
+            n_tagged = len(full_list & gene_set)
+            legend_name = f"{name} ({n_tagged}/{n_list} genes, {n_tagged / n_list:.1%})"
             fig.add_scatter(
                 x=n.values,
                 y=n.index,
                 mode="markers",
                 marker=dict(symbol="diamond", size=10, color=color, line=dict(width=1, color="rgba(0,0,0,0.33)")),
-                name=name,
+                name=legend_name,
                 customdata=list(zip(n.values, pct.values)),
                 hovertemplate=f"%{{y}}<br>%{{customdata[0]}} {hover_label}, %{{customdata[1]:.1f}}% of group<extra></extra>",
             )
