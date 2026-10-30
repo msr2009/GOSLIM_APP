@@ -46,11 +46,12 @@ coverage_tab = ui.nav_panel(
         width=1 / 5,
     ),
     output_widget("group_size_plot"),
-    ui.layout_column_wrap(
-        ui.input_switch("include_wormtagdb", "Include WormTagDB-tagged genes", True),
-        ui.input_switch("include_cgc", "Include CGC-tagged genes", True),
-        width=1 / 2,
+    ui.input_file(
+        "class_upload",
+        "Upload gene classes (long-form: gene<TAB>class; replaces the defaults)",
+        accept=[".tsv", ".txt", ".csv"],
     ),
+    ui.output_ui("class_switches"),
 )
 
 slim_groups_tab = ui.nav_panel(
@@ -115,6 +116,14 @@ slim_hygiene_tab = ui.nav_panel(
     ),
 )
 
+# title with a muted note on when the tag data was last fetched
+app_title = ui.span(
+    "GO Slim Explorer",
+    ui.span(f" · tag data fetched {config.DATA_FETCHED}", class_="text-muted fs-6")
+    if config.DATA_FETCHED
+    else "",
+)
+
 app_ui = ui.page_sidebar(
     sidebar,
     ui.busy_indicators.use(spinners=True, pulse=True),
@@ -126,5 +135,5 @@ app_ui = ui.page_sidebar(
         gene_detail_tab,
         slim_hygiene_tab,
     ),
-    title="GO Slim Explorer",
+    title=app_title,
 )

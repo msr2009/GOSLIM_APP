@@ -9,10 +9,10 @@ from aspects import ASPECT_NAMESPACE
 from go_data import (
     build_replaced_by_map,
     load_gaf,
+    load_gene_classes,
     load_genes,
     load_godag,
     load_slim_ids,
-    load_tagged_genes,
 )
 
 
@@ -62,7 +62,7 @@ def build_data(progress=print):
             progress(f"WARNING: gene list '{key}' not found at {path}, skipping")
 
     symbol_lookup = _build_symbol_lookup(ann)
-    tagged_genes, tagged_genes_cgc = load_tagged_genes(config.TAGGED_GENES_PATH)
+    gene_classes = load_gene_classes(config.GENE_CLASSES_PATH, symbol_lookup)
 
     progress(f"Done. Total load time {time.time() - t0:.1f}s")
 
@@ -76,8 +76,7 @@ def build_data(progress=print):
         "base_slims": base_slims,
         "gene_lists": gene_lists,
         "symbol_lookup": symbol_lookup,
-        "tagged_genes": tagged_genes,
-        "tagged_genes_cgc": tagged_genes_cgc,
+        "gene_classes": gene_classes,
     }
 
 

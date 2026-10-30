@@ -17,7 +17,7 @@ from exports import (
     genes_for_group,
     genes_for_partition_group,
 )
-from go_data import load_genes
+from go_data import load_gene_classes, load_genes
 from shiny import reactive, render, ui
 from shinywidgets import render_widget
 from slimming import compute_grouping
@@ -25,6 +25,8 @@ from startup import DATA
 from ui_layout import STATIC_BASE_SLIM_CHOICES
 
 SAVED_BASE_PREFIX = "saved:"
+# diamond marker colors for gene classes, cycled by class order
+MARKER_COLORS = ["#f97316", "#22c55e", "#a855f7", "#ec4899", "#14b8a6", "#eab308"]
 
 
 def _go_id_cell(go_id, slim_ids):
@@ -87,6 +89,35 @@ def server(input, output, session):
         return frozenset(ids)
 
     @reactive.calc
+    def gene_classes():
+        # uploaded long-form file replaces the default classes; unusable uploads fall back
+        upload = input.class_upload()
+        if upload:
+            classes = load_gene_classes(upload[0]["datapath"], DATA["symbol_lookup"])
+            if classes:
+                return classes
+            ui.notification_show(
+                "No gene/class rows found in upload - using default classes.", type="warning"
+            )
+        return DATA["gene_classes"]
+
+    def classes_by_switch():
+        # [(index, class, genes, is_on)]; a switch not yet rendered counts as on
+        return [
+            (i, name, genes, input[f"class_switch_{i}"]() if f"class_switch_{i}" in input else True)
+            for i, (name, genes) in enumerate(gene_classes().items())
+        ]
+
+    @render.ui
+    def class_switches():
+        # one include switch per class; ids are positional since class names are free text
+        switches = [
+            ui.input_switch(f"class_switch_{i}", f"Include {name} genes ({len(genes)})", True)
+            for i, (name, genes) in enumerate(gene_classes().items())
+        ]
+        return ui.layout_column_wrap(*switches, width=1 / 2)
+
+    @reactive.calc
     def gene_symbols():
         # uploaded file wins over the dropdown selection
         upload = input.gene_upload()
@@ -94,12 +125,9 @@ def server(input, output, session):
             genes = load_genes(upload[0]["datapath"])
         else:
             genes = DATA["gene_lists"].get(input.gene_list(), [])
-        # drop tagged genes when their switch is off (CGC genes are a subset of WormTagDB genes)
-        if not input.include_wormtagdb():
-            genes = [g for g in genes if g not in DATA["tagged_genes"]]
-        if not input.include_cgc():
-            genes = [g for g in genes if g not in DATA["tagged_genes_cgc"]]
-        return genes
+        # drop genes belonging to any class whose switch is off
+        excluded = set().union(*[genes for _, _, genes, on in classes_by_switch() if not on])
+        return [g for g in genes if g not in excluded]
 
     @reactive.calc
     def grouping():
@@ -361,18 +389,10 @@ def server(input, output, session):
                 hovertemplate=f"%{{y}}<br>%{{customdata[0]}} {hover_label}, %{{customdata[1]:.1f}}% of group<extra></extra>",
             )
 
-        # a marker is only drawn while its genes are included in the calculation
-        if input.include_wormtagdb():
-            _add_tagged_marker(
-                DATA["tagged_genes"], "WormTagDB fluorescent tags", "#f97316", "tagged genes (WormTagDB)"
-            )
-        if input.include_cgc():
-            _add_tagged_marker(
-                DATA["tagged_genes_cgc"],
-                "CGC-available fluorescent tags",
-                "#22c55e",
-                "tagged genes with a CGC strain",
-            )
+        # a marker is only drawn while its class is included in the calculation
+        for i, name, genes, on in classes_by_switch():
+            if on:
+                _add_tagged_marker(genes, name, MARKER_COLORS[i % len(MARKER_COLORS)], f"{name} genes")
         return fig
 
     # --- slim groups tab ---

@@ -5,6 +5,9 @@
 #   ./deploy.sh --manifest   stage vendor data, print what WOULD be uploaded, then clean up
 #   ./deploy.sh --name foo   any extra args are passed through to `rsconnect deploy shiny`
 #
+# The saved rsconnect account nickname defaults to "mattrich" (see `rsconnect list`); override
+# with ACCOUNT=other ./deploy.sh, or by passing --name/-n explicitly.
+#
 # WHY THERE IS NO .rscignore
 # --------------------------
 # .rscignore is an R rsconnect feature. rsconnect-python does not read it: in 1.30.0
@@ -28,7 +31,7 @@
 #   app.py and every *.py module, requirements.txt (the dependency manifest on shinyapps.io),
 #   vendor/gene_association.WS298.wb, vendor/gene_ontology.WS298.obo,
 #   vendor/goslim_{agr,generic}.obo, vendor/data/*.tsv gene lists,
-#   vendor/excluded_terms.json, vendor/wormtagdb_tagged_genes.tsv, saved_slims/*.json.
+#   vendor/excluded_terms.json, vendor/gene_classes.tsv, saved_slims/*.json.
 # Do not exclude *.py files based on an import scan -- keep all code.
 #
 # The existing app's id lives in goslim_app/rsconnect-python/goslim_app.json, so a plain
@@ -39,6 +42,7 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 APP_DIR="$REPO_DIR/goslim_app"
 ENTRYPOINT="app:app"
+ACCOUNT="${ACCOUNT:-mattrich}"
 
 EXCLUDES=(
     # compiled bytecode in nested __pycache__ dirs (top-level one is ignored by rsconnect)
@@ -89,4 +93,10 @@ EOF
     exit 0
 fi
 
-rsconnect deploy shiny "$APP_DIR" --entrypoint "$ENTRYPOINT" "${EXCLUDES[@]}" "$@"
+# default to the saved account unless the caller names a target (-n/--name/-s/--server/-T/--token)
+TARGET=(--name "$ACCOUNT")
+for arg in "$@"; do
+    case "$arg" in -n|--name|-s|--server|-T|--token) TARGET=() ;; esac
+done
+
+rsconnect deploy shiny "$APP_DIR" --entrypoint "$ENTRYPOINT" "${TARGET[@]}" "${EXCLUDES[@]}" "$@"

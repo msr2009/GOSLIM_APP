@@ -71,6 +71,12 @@ App architecture (`goslim_app/`):
 - `ui_layout.py` / `server_main.py` — UI layout (5 tabs: Coverage, Slim groups, Add terms,
   Gene detail, Slim hygiene) and all reactive wiring
 
+Gene classifications (coverage-plot markers + include switches) come from a long-form
+`gene<TAB>class` file: default `gene_classes.tsv` at the repo root (written by
+`build_tagged_genes.py` from the WormTagDB export; classes "WormTagDB fluorescent tags" and
+"CGC-available fluorescent tags"), or a user upload on the Coverage tab, which replaces the
+defaults. Any number of classes; header optional; `.csv` uploads are comma-separated.
+
 Gotchas specific to the app:
 - `excluded_terms.json` at the repo root is shared, global state the app mutates directly
   on every exclude/un-exclude — it is not versioned per-slim.

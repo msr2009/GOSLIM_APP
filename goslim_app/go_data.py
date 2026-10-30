@@ -88,15 +88,22 @@ def load_genes(genes_arg):
     return genes
 
 
-def load_tagged_genes(path):
-    """WormTagDB export -> (fluor_tagged, fluor_tagged_and_cgc) gene-symbol frozensets.
-    fluor_tagged is restricted to genes with a fluorescent-protein-tagged allele
-    (fluor_tags non-empty); fluor_tagged_and_cgc is the subset with a CGC-orderable
-    strain (cgc_strains non-empty)."""
-    if not os.path.isfile(path):
-        return frozenset(), frozenset()
+def load_gene_classes(path, symbol_lookup=None):
+    """Long-form gene<sep>class file -> {class: frozenset(genes)}, in first-seen class order.
+    Tab-separated unless the name ends in .csv; header row optional; extra columns ignored.
+    When symbol_lookup (casefolded -> canonical symbol) is given, genes are canonicalized."""
+    if not path or not os.path.isfile(path):
+        return {}
+    sep = "," if str(path).lower().endswith(".csv") else "\t"
     df = pd.read_csv(
-        path, sep="\t", usecols=["gene", "fluor_tags", "cgc_strains"], keep_default_na=False
+        path, sep=sep, header=None, usecols=[0, 1], names=["gene", "class"],
+        dtype=str, keep_default_na=False, skip_blank_lines=True,
     )
-    fluor = df[df["fluor_tags"] != ""]
-    return frozenset(fluor["gene"]), frozenset(fluor.loc[fluor["cgc_strains"] != "", "gene"])
+    df = df.apply(lambda col: col.str.strip())
+    # drop an optional header row and rows missing either field
+    if len(df) and (df.iloc[0].str.casefold() == ["gene", "class"]).all():
+        df = df.iloc[1:]
+    df = df[(df["gene"] != "") & (df["class"] != "")]
+    if symbol_lookup:
+        df["gene"] = [symbol_lookup.get(g.casefold(), g) for g in df["gene"]]
+    return {name: frozenset(grp["gene"]) for name, grp in df.groupby("class", sort=False)}

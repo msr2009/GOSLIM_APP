@@ -18,8 +18,8 @@ cp "$REPO_DIR/goslim_agr.obo" "$VENDOR_DIR/"
 cp "$REPO_DIR/goslim_generic.obo" "$VENDOR_DIR/"
 cp "$REPO_DIR/data/"*.tsv "$VENDOR_DIR/data/"
 
-if [ -f "$REPO_DIR/wormtagdb_tagged_genes.tsv" ]; then
-    cp "$REPO_DIR/wormtagdb_tagged_genes.tsv" "$VENDOR_DIR/"
+if [ -f "$REPO_DIR/gene_classes.tsv" ]; then
+    cp "$REPO_DIR/gene_classes.tsv" "$VENDOR_DIR/"
 fi
 
 if [ -f "$REPO_DIR/excluded_terms.json" ]; then

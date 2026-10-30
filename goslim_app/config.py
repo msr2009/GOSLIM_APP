@@ -31,6 +31,8 @@ GENE_LIST_LABELS = {stem: stem.replace("_", " ") for stem in GENE_LIST_PATHS}
 # hand-picked display names where filename-prettifying isn't the desired label
 GENE_LIST_LABEL_OVERRIDES = {
     "disease_orthologs": "disease orthologs",
+    "neuronal_disease_orthologs": "neuronal disease orthologs",
+    "non_neuronal_disease_orthologs": "non-neuronal disease orthologs",
 }
 GENE_LIST_LABELS.update(
     {k: v for k, v in GENE_LIST_LABEL_OVERRIDES.items() if k in GENE_LIST_PATHS}
@@ -42,10 +44,10 @@ DEFAULT_GENE_LIST = "celegans_proteome" if "celegans_proteome" in GENE_LIST_PATH
 SAVED_SLIMS_DIR = APP_DIR / "saved_slims"
 EXCLUDE_FILE = DATA_ROOT / "excluded_terms.json"
 
-# gene symbols with an endogenously tagged allele in WormTagDB (wormtagdb.rc.duke.edu);
-# kept outside GENE_LIST_DIR since it has extra columns (wbid/n_strains/tags), not a
-# plain one-symbol-per-line gene list
-TAGGED_GENES_PATH = DATA_ROOT / "wormtagdb_tagged_genes.tsv"
+# default long-form gene classifications (gene<TAB>class, one row per membership), written by
+# build_tagged_genes.py from WormTagDB (wormtagdb.rc.duke.edu); kept outside GENE_LIST_DIR
+# since it is not a plain one-symbol-per-line gene list. Users can replace it via upload.
+GENE_CLASSES_PATH = DATA_ROOT / "gene_classes.tsv"
 
 # C. elegans taxon id as it appears in the GAF Taxon column
 TAXON = "taxon:6239"
@@ -62,3 +64,7 @@ def load_overrides():
         return {}
     with open(override_path) as f:
         return json.load(f)
+
+# date the WormTagDB export was fetched (written by build_tagged_genes.py); shown in the title
+_FETCH_DATE_PATH = APP_DIR / "data_fetched.txt"
+DATA_FETCHED = _FETCH_DATE_PATH.read_text().strip() if _FETCH_DATE_PATH.is_file() else None
